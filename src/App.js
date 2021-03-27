@@ -1,6 +1,14 @@
-import { Box, Button, Container, Grid, makeStyles } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  makeStyles,
+  Typography,
+} from "@material-ui/core";
 import react from "react";
 import Card from "./Components/cards";
+
 
 const useStyles = makeStyles({
   container: {
@@ -10,6 +18,10 @@ const useStyles = makeStyles({
   i: {
     border: "1px solid purple",
     height: "20px",
+  },
+  main: {
+    width: "100%",
+    height: "100vh",
   },
 });
 
@@ -25,12 +37,26 @@ function App() {
           </Button>
         </Box>
       </Box>
-      <Box display="flex" conatiner flexDirection="row" justifyContent = "center">
+      <Box
+        className={classes.main}
+        display="flex"
+        conatiner
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Box>
+          <Typography variant="h3">{"<Dislike"}</Typography>
+        </Box>
         <Box>
           <Card />
         </Box>
+        <Box>
+          <Typography variant="h3">{"like>"}</Typography>
+        </Box>
       </Box>
     </Container>
+   
   );
 }
 
