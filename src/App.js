@@ -6,13 +6,9 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import react from "react";
+import axios from "axios";
+import react, { useEffect, useState } from "react";
 import Card from "./Components/cards";
-
-//states
- const [images, setImages] = useState(0);
- const [action, setActions] = useState(0);
- const [auth, setAuth] = useState(0);
 
 const useStyles = makeStyles({
   container: {
@@ -27,14 +23,31 @@ const useStyles = makeStyles({
     width: "100%",
     height: "100vh",
   },
+
+  // cardContainer:{
+  //   position:"fixed"
+  // }
+
 });
 
-
-
-
-
 function App() {
+  //states
+  const [images, setImages] = useState(0);
+  const [action, setActions] = useState(0);
+  const [auth, setAuth] = useState(0);
   const classes = useStyles();
+
+  useEffect(() => {
+    axios
+      .get("https://jsonplaceholder.typicode.com/photos")
+      .then((res) => {
+        console.log(res.data.slice(0,10));
+        setImages(res.data.slice(0,10))
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }, []);
 
   return (
     <Container className={classes.container} disableGutters maxWidth={1}>
@@ -56,15 +69,14 @@ function App() {
         <Box>
           <Typography variant="h3">{"<Dislike"}</Typography>
         </Box>
-        <Box>
-          <Card />
+        <Box className = {classes.cardContainer}>
+          <Card data = {images}/>
         </Box>
         <Box>
           <Typography variant="h3">{"like>"}</Typography>
         </Box>
       </Box>
     </Container>
-   
   );
 }
 
