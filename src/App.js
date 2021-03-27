@@ -9,6 +9,10 @@ import {
 import react from "react";
 import Card from "./Components/cards";
 
+//states
+ const [images, setImages] = useState(0);
+ const [action, setActions] = useState(0);
+ const [auth, setAuth] = useState(0);
 
 const useStyles = makeStyles({
   container: {
@@ -24,6 +28,10 @@ const useStyles = makeStyles({
     height: "100vh",
   },
 });
+
+
+
+
 
 function App() {
   const classes = useStyles();
