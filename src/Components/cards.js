@@ -15,7 +15,6 @@ const useStyles = makeStyles({
     height: 300,
     width: "100%",
   },
-
 });
 
 const ViewCard = (props) => {
@@ -24,7 +23,7 @@ const ViewCard = (props) => {
   return props.data
     ? props.data.map((item, index) => {
         return (
-          <div>
+          <div onClick={() => props.delete(index)} key={index}>
             <Card className={classes.root}>
               <CardActionArea>
                 <CardMedia className={classes.media} image={`${item.url}`} />
