@@ -6,9 +6,9 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
+import Flips from "./Components/flip-cards";
 import axios from "axios";
 import react, { useEffect, useState } from "react";
-import Card from "./Components/cards";
 
 const useStyles = makeStyles({
   container: {
@@ -25,15 +25,14 @@ const useStyles = makeStyles({
   },
 });
 
-function App() {
+const App = () => {
   //states
-  const [images, setImages] = useState(0);
+  const [images, setImages] = useState();
   const [action, setActions] = useState(0);
   const [auth, setAuth] = useState(0);
   const classes = useStyles();
 
   useEffect(() => {
-    console.log("api calling");
     axios
       .get("https://jsonplaceholder.typicode.com/photos")
       .then((res) => {
@@ -45,15 +44,15 @@ function App() {
       });
   }, []);
 
-  const deleteCard = (index) => {
-    console.log(index);
-    // const state = [...images]
-    let data = images.map((item) => {
-      return item.id !== images[index];
-    });
-    setImages(data);
-    console.log(images);
-  };
+  // const deleteCard = (index) => {
+  //   console.log(index);
+  //   // const state = [...images]
+  //   let data = images.map((item) => {
+  //     return item.id !== images[index];
+  //   });
+  //   setImages(data);
+  //   console.log(images);
+  // };
 
   return (
     <Container className={classes.container} disableGutters maxWidth={1}>
@@ -75,8 +74,8 @@ function App() {
         <Box>
           <Typography variant="h3">{"<Dislike"}</Typography>
         </Box>
-        <Box className={classes.cardContainer}>
-          <Card data={images} delete={deleteCard} />
+        <Box>
+          <Flips data={images} />
         </Box>
         <Box>
           <Typography variant="h3">{"like>"}</Typography>
@@ -84,6 +83,6 @@ function App() {
       </Box>
     </Container>
   );
-}
+};
 
 export default App;

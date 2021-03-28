@@ -1,105 +1,98 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import { Frame, useMotionValue, useTransform, useAnimation } from 'framer';
+import React, { useState } from "react";
+// import TinderCard from '../react-tinder-card/index'
+import TinderCard from "react-tinder-card";
+import './dummy.css'
 
-// Card component with destructured props
-const Card = ({ image, color }) => {
-  
-// To move the card as the user drags the cursor
-const motionValue = useMotionValue(0);
+const db =  [
+      {
+      image: 'https://img.icons8.com/color/452/GeeksforGeeks.png',
+      color: '#55ccff'
+      },
+      {
+      image: 'https://img.icons8.com/color/452/GeeksforGeeks.png',
+      color: '#e8e8e8'
+      },
+      {
+      image: 'https://img.icons8.com/color/452/GeeksforGeeks.png',
+      color: '#0a043c'
+      },
+      {
+      image: 'https://img.icons8.com/color/452/GeeksforGeeks.png',
+      color: 'black'
+      }
+    ];
 
-// To rotate the card as the card moves on drag
-const rotateValue = useTransform(motionValue, [-200, 200], [-50, 50]);
+// [
+//   {
+//     name: "Richard Hendricks",
+//     url: "./img/richard.jpg",
+//   },
+//   {
+//     name: "Erlich Bachman",
+//     url: "./img/erlich.jpg",
+//   },
+//   {
+//     name: "Monica Hall",
+//     url: "./img/monica.jpg",
+//   },
+//   {
+//     name: "Jared Dunn",
+//     url: "./img/jared.jpg",
+//   },
+//   {
+//     name: "Dinesh Chugtai",
+//     url: "./img/dinesh.jpg",
+//   },
+// ];
 
-// To decrease opacity of the card when swipped
-// on dragging card to left(-200) or right(200)
-// opacity gradually changes to 0
-// and when the card is in center opacity = 1
-const opacityValue = useTransform(
-	motionValue,
-	[-200, -150, 0, 150, 200],
-	[0, 1, 1, 1, 0]
-);
+function Simple() {
+  const characters = db;
+  const [lastDirection, setLastDirection] = useState();
 
-// Framer animation hook
-const animControls = useAnimation();
+  const swiped = (direction, nameToDelete) => {
+    console.log("removing: " + nameToDelete);
+    setLastDirection(direction);
+  };
 
-// Some styling for the card
-// it is placed inside the card component
-// to make backgroundImage and backgroundColor dynamic
-const style = {
-	backgroundImage: `url(${image})`,
-	backgroundRepeat: 'no-repeat',
-	backgroundSize: 'contain',
-	backgroundColor: color,
-	boxShadow: '5px 10px 18px #888888',
-	borderRadius: 10,
-	height: 300
-};
+  const outOfFrame = (name) => {
+    console.log(name + " left the screen!");
+  };
 
-return (
-	<div className='App'>
-	<Frame
-		center
-		// Card can be drag only on x-axis
-		drag='x'
-		x={motionValue}
-		rotate={rotateValue}
-		opacity={opacityValue}
-		dragConstraints={{ left: -1000, right: 1000 }}
-		style={style}
-		onDragEnd={(event, info) => {
-		
-		// If the card is dragged only upto 150 on x-axis
-		// bring it back to initial position
-		if (Math.abs(info.point.x) <= 150) {
-			animControls.start({ x: 0 });
-		} else {
-			
-			// If card is dragged beyond 150
-			// make it disappear
+  return (
+    <div>
+      <link
+        href="https://fonts.googleapis.com/css?family=Damion&display=swap"
+        rel="stylesheet"
+      />
+      <link
+        href="https://fonts.googleapis.com/css?family=Alatsi&display=swap"
+        rel="stylesheet"
+      />
+      <h1>React Tinder Card</h1>
+      <div className="cardContainer">
+        {characters.map((character) => (
+          <TinderCard
+            className="swipe"
+            key={character.name}
+            onSwipe={(dir) => swiped(dir, character.name)}
+            onCardLeftScreen={() => outOfFrame(character.name)}
+          >
+            <div
+              style={{ backgroundImage: "url(" + character.image + ")" }}
+              className="card"
+            >
+              <h3>{character.name}</h3>
+            </div>
+          </TinderCard>
+        ))}
+      </div>
+      {lastDirection ? (
+        <h2 className="infoText">You swiped {lastDirection}</h2>
+      ) : (
+        <h2 className="infoText" />
+      )}
+    </div>
+  );
+}
 
-			// Making use of ternary operator
-			animControls.start({ x: info.point.x < 0 ? -200 : 200 });
-		}
-		}}
-	/>
-	</div>
-);
-};
-
-const App = () => {
-const cards = [
-	{
-	image: 'https://img.icons8.com/color/452/GeeksforGeeks.png',
-	color: '#55ccff'
-	},
-	{
-	image: 'https://img.icons8.com/color/452/GeeksforGeeks.png',
-	color: '#e8e8e8'
-	},
-	{
-	image: 'https://img.icons8.com/color/452/GeeksforGeeks.png',
-	color: '#0a043c'
-	},
-	{
-	image: 'https://img.icons8.com/color/452/GeeksforGeeks.png',
-	color: 'black'
-	}
-];
-
-return (
-	<div className='App'>
-	
-	{/* Traversing through cards arrray using map function
-	and populating card with different image and color */}
-		
-	{cards.map((card) => (
-		<Card image={card.image} color={card.color} />
-	))}
-	</div>
-);
-};
-
-ReactDOM.render(<App />, document.getElementById('root'));
+export default Simple;
